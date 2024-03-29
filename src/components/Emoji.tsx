@@ -1,4 +1,4 @@
-import { Icon, IconProps } from "@chakra-ui/react";
+import { Icon } from "@chakra-ui/react";
 import { BsFillHandThumbsUpFill } from "react-icons/bs";
 import { FiMeh } from "react-icons/fi";
 import { GiBullseye } from "react-icons/gi";
