@@ -12,44 +12,20 @@ interface Props {
 }
 
 const GameGrid = ({ gameQuery }: Props) => {
-  const {
-    error,
-    data,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useGames(gameQuery);
+  const { error, data, isLoading, hasNextPage, fetchNextPage } =
+    useGames(gameQuery);
   const skeletons = [1, 2, 3, 4, 5, 6];
   if (error) return <Text>{error.message}</Text>;
-
-  const fetchedGamesCount = data?.pages.reduce(
-    (total, page) => total + page.results.length,
-    0
-  );
+  const fetchedGamesCount =
+    data?.pages.reduce((total, page) => total + page.results.length, 0) || 0;
 
   return (
-    <>
+    <Box padding="10px">
       <InfiniteScroll
-        dataLength={fetchedGamesCount || 0} //This is important field to render the next data
+        dataLength={fetchedGamesCount}
         next={fetchNextPage}
         hasMore={!!hasNextPage}
         loader={<Spinner />}
-        // endMessage={
-        //   <p style={{ textAlign: "center" }}>
-        //     {/* <b>Yay! You have seen it all</b> */}
-        //   </p>
-        // }
-        // below props only if you need pull down functionality
-        // refreshFunction={this.refresh}
-        // pullDownToRefresh
-        // pullDownToRefreshThreshold={50}
-        // pullDownToRefreshContent={
-        //   <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
-        // }
-        // releaseToRefreshContent={
-        //   <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
-        // }
       >
         <SimpleGrid
           columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
@@ -75,9 +51,15 @@ const GameGrid = ({ gameQuery }: Props) => {
               ))}
             </Fragment>
           ))}
+          {isLoading &&
+            skeletons.map((skeleton) => (
+              <GameCardContainer key={skeleton}>
+                <GameCardSkeleton />
+              </GameCardContainer>
+            ))}
         </SimpleGrid>
       </InfiniteScroll>
-    </>
+    </Box>
   );
 };
 
