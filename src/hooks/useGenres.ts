@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, QueryFunction } from "@tanstack/react-query";
 import genres from "../data/genres";
 import APIClient from "../services/api-client";
 
@@ -9,18 +9,13 @@ export interface Genre {
   image_background: string;
 }
 
-// Define the type for the data returned by the API
-interface APIResponse {
-  count: number;
-  results: Genre[];
-}
-
 const useGenres = () => {
-  return useQuery<APIResponse>({
+  // Specify the types for useQuery
+  return useQuery({
     queryKey: ["genres"],
     queryFn: apiClient.getAll, // Assert apiClient.getAll as QueryFn
     staleTime: 24 * 60 * 60 * 1000, //24 hours
-    initialData: { count: genres.length, results: genres },
+    initialData: genres,
   });
 };
 
